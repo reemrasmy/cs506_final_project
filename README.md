@@ -10,9 +10,57 @@ The high-dimensionaltiy of these datasets (each tumor holds expression measureme
 
 ### Goals ###
 
-Develop and evaluate supervised learning models to predict breast cancer molecular subtype (Luminal A, Luminal B, HER2-enriched, and Basal-like) from RNA-seq gene expression data in the TCGA BRCA dataset.
+#### Primary Goal ####
 
-Compare classification techniques to dermine which model performs best
+Assess the separaility of breast cancer molecular subtypes in gene expression space using supervised classificaiton models 
+
+Secondary Goals: 
+
+1. Compare the accuracy of linear and nonlinear approaches for classifying breast cancer subtypes
+
+2. Evaluate how dimensionality reduction affects classification performance
+
+3. Visualize subtype structure using PCA and clustering methods.
+
+
+### Timeline ###
+
+#### Week 1: Data Preparation ####
+Download TCGA BRCA RNA-seq expression data & merge datasets to filter tumor samples 
+
+Explore the class distribution 
+
+#### Week 2: Dimensionality Reduction ####
+Apply variance-based filtering 
+
+Perform PCA/SVD
+
+Generate initial subtype visuzalization 
+
+#### Week 3: Clustering ####
+Apply K-means clustering 
+
+Compare clusters to known subtype labels & understand initial biological separability 
+
+#### Week 4: Baseline Classification ####
+Check-in #1 (After Spring Break) 
+
+Implement first supervised model (KNN)
+
+#### Week 5-6: Model Comparison ####
+
+Implement additional models (Decision Tree, Linear SVM)
+Compare linear vs. nonlinear approaches 
+
+#### Week 7: Logistic Regression ####
+
+Add logisitice regression model and analyze separability of subtypes
+
+#### Week 8: Neural Networks (if time allows) & Summarization/Analysis ####
+
+Try to implement a simple feedforward neural network 
+
+Check in #2
 
 ### Data Collection ###
 
