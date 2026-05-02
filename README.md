@@ -29,9 +29,11 @@ Installs all **required libraries** in `requirements.txt`
 Download Gene Expression data and Clinical Metadata as specified in *Data Collection* section
 
 ### Prepare Data
+
 ```bash
 make prep
 ```
+
 This runs `src/data_prep.py` which: 
    1. loads gene expression data and clinical metadata 
    2. merges them into a single dataframe 
@@ -324,13 +326,15 @@ strong baseline for non-linear classification (macro_avg_f1 = 0.84)*
 *The decision tree model **struggles with overlapping subtypes,** particularly **Luminal A and Luminal B***
 
 ---
+
 ### Support Vector Machine (RBF)
 
 ![svm rbf](figures/SVM_rbf.png)
 
-*SVM enhanced classificatiion significantly with **perfect Basal subtype classification**, minimal Her2 classification error, 
+SVM enhanced classificatiion significantly with **perfect Basal subtype classification**, minimal Her2 classification error, 
 but still presenting some confusion between **Luminal A and Luminal B**. The model captures the more complex structure but still
 presents **difficulty in a specific region** of the data shown in the Misclassified Samples (SVM) visualization*
+
 ---
 
 ### Logistic Regression (Best Performing Model)
@@ -403,5 +407,5 @@ cs506_final_project/
 ```
 
 ### Citations
-TCGA UC Santa Cruz BRCA Data Set
+TCGA UC Santa Cruz BRCA 
 
