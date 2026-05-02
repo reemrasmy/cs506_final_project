@@ -1,7 +1,7 @@
 # Predictive Modeling of Breast Cancer Subtypes from Gene Expression Data
 
 ## Presentation Video
-YouTube link: ...
+YouTube link: https://youtu.be/y20izmySjMg
 
 ## How to Build and Run the Code
 
@@ -73,15 +73,18 @@ laboratory testing. However, data generated through **RNA sequencing (RNA-seq)**
 these classifications by **essentially measuring the activity levels of all genes within a tumor and outputting a gene 
 expression profile.** 
 
+
 The high-dimensionaltiy of these datasets (each tumor holds expression measurements for ~ 20,000 genes) make them quite 
 complex to analyze manually. I would like to develop a data preparation procedure and supervised classification models that can 
 **predict breast cancer subtypes from RNA-seq expression data** and **evaluate model performance.**
+
 ---
 
 ### Primary Objective
 
 Evaluate the predictability of breast cancer molecular subtypes from RNA-seq gene expression data using supervised machine
 learning models 
+
 ---
 
 ### Secondary Objectives 
