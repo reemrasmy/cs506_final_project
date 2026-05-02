@@ -1,5 +1,6 @@
 import pandas as pd
 
+# using test data because git blocks real data. Path should be: "data/processed_brca_data.csv
 data_path = "tests/test_data.csv"
 
 
