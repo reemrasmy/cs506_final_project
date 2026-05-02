@@ -1,0 +1,5 @@
+sampleID,GENE1,GENE2,GENE3,subtype
+S1,1.2,3.4,0.5,LumA
+S2,2.1,1.5,0.7,LumB
+S3,5.0,0.8,2.2,Basal
+S4,4.2,2.2,1.8,Her2
