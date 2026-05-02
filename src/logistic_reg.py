@@ -5,6 +5,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
+from sklearn.metrics import ConfusionMatrixDisplay
+from sklearn.model_selection import GridSearchCV
+
 
 
 def variance_filtering(exp_data, n_genes=5000):
@@ -53,13 +56,52 @@ X_train_scaled = scaler.fit_transform(X_train_filtered)
 X_test_scaled = scaler.transform(X_test_filtered)
 
 
-########################### Apply Baseline (1st) Model: Logisitic Regression ###########################
-# fit logistic regression
-model = LogisticRegression(max_iter=1000)
-model.fit(X_train_scaled, y_train)
+########################### Apply Model: Logisitic Regression ###########################
+# Untuned logistic regression model
+logreg_default = LogisticRegression(max_iter=1000)
 
-y_pred = model.predict(X_test_scaled)
-print(classification_report(y_test, y_pred))
+logreg_default.fit(X_train_scaled, y_train)
+y_pred_default = logreg_default.predict(X_test_scaled)
+
+print("\nUntuned Logistic Regression Results:")
+print(classification_report(y_test, y_pred_default, zero_division=0))
+
+
+# Tune logistic regression hyperparameters
+# GridSearchCV tests different regularization strengths using training data only.
+param_grid = {
+    "C": [0.01, 0.1, 1, 10, 100],
+    "penalty": ["l1"],
+    "solver": ["liblinear"],        # Using L1 because our data is sparse
+}
+
+logreg = LogisticRegression(max_iter=1000)
+
+grid_search = GridSearchCV(
+    estimator=logreg,
+    param_grid=param_grid,
+    scoring="f1_macro",
+    cv=5,
+    n_jobs=-1
+)
+
+grid_search.fit(X_train_scaled, y_train)
+
+print("\nBest params:", grid_search.best_params_)
+print("Best CV macro F1:", grid_search.best_score_)
+
+# best_estimator_ is the best model learned after GridSearchCV fitting
+best_logreg = grid_search.best_estimator_
+y_pred_tuned = best_logreg.predict(X_test_scaled)
+
+print("\nTuned Logistic Regression Results:")
+print(classification_report(y_test, y_pred_tuned, zero_division=0))
+
+
+# Use the better test-performing model for visualizations.
+# In this project, the untuned logistic regression model performed slightly better.
+y_pred = y_pred_default
+final_model = logreg_default
 
 ########################### Visualize Outcome ###########################
 plt.figure(figsize=(12,5))
@@ -110,7 +152,63 @@ plt.ylim(0, 1)
 
 plt.show()
 
+###################### Visualize Misclassified Points ######################
+
+ConfusionMatrixDisplay.from_predictions(
+    y_test,
+    y_pred,
+    display_labels=classes,
+    cmap="Blues"
+)
+
+plt.title("Confusion Matrix: Logistic Regression")
+plt.show()
+
+
+misclassified = (y_test != y_pred)
+
+plt.figure(figsize=(6,5))
+
+# plot all points by true label
+for cls in classes:
+    mask = (y_test == cls)
+    plt.scatter(
+        X_test_pca[mask, 0],
+        X_test_pca[mask, 1],
+        label=cls,
+        alpha=0.5
+    )
+
+# highlight incorrect predictions
+plt.scatter(
+    X_test_pca[misclassified, 0],
+    X_test_pca[misclassified, 1],
+    facecolors="none",
+    edgecolors="black",
+    s=80,
+    label="Misclassified"
+)
+
+plt.title("Misclassified Samples: Logistic Regression")
+plt.xlabel("PC1")
+plt.ylabel("PC2")
+plt.legend()
+plt.show()
+
+
+
 """
 Results 
+
+              precision    recall  f1-score   support
+
+       Basal       1.00      1.00      1.00        28
+        Her2       0.80      0.92      0.86        13
+        LumA       0.92      0.91      0.91        85
+        LumB       0.82      0.79      0.81        39
+
+    accuracy                           0.90       165
+   macro avg       0.88      0.91      0.89       165
+weighted avg       0.90      0.90      0.90       165
 
 """

@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report
+from sklearn.metrics import ConfusionMatrixDisplay
 
 def variance_filtering(exp_data, n_genes=5000):
     gene_variances = exp_data.var(axis=0)
@@ -33,7 +34,6 @@ X_train, X_test, y_train, y_test = train_test_split(
     random_state=42
 )
 
-
 ########################### Variance-Based Gene Filtering ###########################
 # Remove zero-variance genes using training set only
 train_var = X_train.var()
@@ -51,6 +51,7 @@ X_test_filtered = X_test_nonzero[top_genes]
 
 
 ########################### Normalize Gene Expression Values ###########################
+
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train_filtered)
 X_test_scaled = scaler.transform(X_test_filtered)
@@ -70,7 +71,7 @@ y_pred_tree = dtree.predict(X_test_scaled)
 print("Decision Tree Results:")
 print(classification_report(y_test, y_pred_tree))
 
-########################### Comparing Decision Tree Depths ###########################
+#Comparing Decision Tree Depths
 depths = [3, 4, 5]
 
 for depth in depths:
@@ -86,9 +87,12 @@ for depth in depths:
     print(classification_report(y_test, y_pred_tree))
 
 # Error: "Precision is ill-defined ... no predicted samples" -- for at least one subtype, the model never predicted that class (Her2)
+
 ########################### Visualize Decision Tree ###########################
+
+
 dtree = DecisionTreeClassifier(
-    max_depth=4,
+    max_depth=3,
     class_weight="balanced",    # added after model failed to predicted Her2
     random_state=43
 )
@@ -109,8 +113,12 @@ plot_tree(
 plt.title("Decision Tree Classifier")
 plt.show()
 
-########################### PCA Visualization of Predictions ###########################
+########################### Visualization of Outcomes ###########################
+
+
 classes = ["Basal", "Her2", "LumA", "LumB"]
+
+# ---------------------- True vs. Predicted Classification ----------------------
 
 pca_plot = PCA(n_components=2)
 X_train_pca_plot = pca_plot.fit_transform(X_train_scaled)
@@ -151,6 +159,18 @@ plt.legend()
 plt.tight_layout()
 plt.show()
 
+
+# ---------------------- Confusion Matrix ----------------------
+
+ConfusionMatrixDisplay.from_predictions(
+    y_test,
+    y_pred_tree,
+    display_labels=classes,
+    cmap="Blues"
+)
+
+plt.title("Confusion Matrix: Decision Tree")
+plt.show()
 
 """
 RESULTS 
